@@ -24,7 +24,7 @@ class User {
         })   
        }
         insertUser(user){
-           let createSql = "insert into User(Username,Password,Address,Email,PhoneNumber) values ('${user.username}','${user.password}','${user.address}','${user.email}','${user.phonenumber}')";
+           let createSql = `insert into User(Username,Password,Address,Email,PhoneNumber) values ('${user.username}','${user.password}','${user.address}','${user.email}','${user.phonenumber}')`;
            this.connection.query(createSql, (err,data)=>{
                if(err){
                    console.log(err);
