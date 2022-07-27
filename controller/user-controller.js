@@ -26,9 +26,9 @@ class UserController {
                     <td ">${user.DOB} </td>
                     <td ">${user.Email}</td>
                     <td ">${user.PhoneNumber}</td>
-                    </tr>`
                     // <td><a href="/views/update/${user.id}" class="btn btn-primary">Edit</a></td>
                     // <td><a href="/views/delete/${user.id}" class="btn btn-danger">Delete</a></td>
+                    </tr>`
                 });
                 
                 data = data.replace('{user}', tbody)
@@ -37,6 +37,47 @@ class UserController {
                 return res.end();
             }
         });
+    }
+    showListUserManager(req,res){
+        fs.readFile('views/manager.html','utf-8',async (err,data)=>{
+            if(err){
+                throw new Error(err.message)
+            }
+            else {
+                let users = await this.user.getUser();
+                let tbody ='';
+                users.map((user,index)=>{
+                    tbody += ` 
+                    <tr>
+                    <td ">${user.Username}</td>
+                    <td ">${user.Password}</td>
+                    <td ">${user.Address}</td>
+                    <td ">${user.DOB} </td>
+                    <td ">${user.Email}</td>
+                    <td ">${user.PhoneNumber}</td>
+                    <td><a href="/views/update/${user.id}" class="btn btn-primary">Edit</a></td>
+                    <td><a href="/views/delete/${user.id}" class="btn btn-danger">Delete</a></td>
+                    </tr>`
+                });
+                
+                data = data.replace('{listUser}', tbody)
+                res.writeHead(200, {'Content-Type':'text/html'});
+                res.write(data);
+                return res.end();
+            }
+        });
+    }
+    showFormLogin(req, res){
+        fs.readFile('views/login/login.html','utf-8',(err,data)=>{
+            if(err){
+                throw new Error(err.message)
+            }
+            else {                   
+                res.writeHead(200, {'Content-Type':'text/html'});
+                res.write(data);
+                return res.end();
+             }
+            })
     }
     showFormCreateUser(req,res){
         
@@ -97,8 +138,8 @@ class UserController {
                     data = data.replace('{name}',user.Username);
                     data = data.replace('{email}', user.Email);
                     data = data.replace('{phone}',user.PhoneNumber);
-                    data = data.replace('{dob}',user.DOB);
-                    
+
+                    // data = data.replace('{dob}',user.DOB); 
                     data = data.replace('{address}',user.Address);
                 }
                 res.writeHead(200, {'Content-Type':'text/html'});

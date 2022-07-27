@@ -39,16 +39,7 @@ let server = http.createServer((req,res)=>{
             homeController.showHomePage(req,res);
             break;
         }
-        case '/register':{
-            
-            if(method ==='GET') {
-                userController.showFormCreateUser(req,res);
-            }
-            else {     
-                userController.createUser(req,res);
-            }
-            break;
-          }
+        
         case '/admin':{
             fs.readFile('views/admin.html','utf-8',(err,data)=>{
                 if(err){
@@ -76,34 +67,30 @@ let server = http.createServer((req,res)=>{
 
             break;
         }
+
+        case '/register':{
+            
+            if(method ==='GET') {
+                userController.showFormCreateUser(req,res);
+            }
+            else {     
+                userController.createUser(req,res);
+            }
+            break;
+          }
+
         case '/login': {
             
         if(method === 'GET') {
-            fs.readFile('views/login/login.html','utf-8',(err,data)=>{
-                if(err){
-                    throw new Error(err.message)
-                }
-                else {
-                    
-                    res.writeHead(200, {'Content-Type':'text/html'});
-                    res.write(data);
-                    return res.end();
-                 }
-                })
+            userController.showFormLogin(req,res)
             }
             else {
             userController.loginUser(req, res);
             }
-
             break;
         }
 
-        // case "/views/user/":{
-        //     userController.showListUser(req,res);
-        //     break;
-        // }
-
-        case '/views/update/':{
+        case '/update':{
             if(method == 'GET'){
                 userController.showUserEditForm(req, res);
             }
@@ -120,14 +107,26 @@ let server = http.createServer((req,res)=>{
             else {
                 res.writeHead(200, {'Content-Type':'text/html'});
                 res.write(data);
-                return res.end("ok");
+                return res.end();
             }
         });   
             break;
         }
+        case '/usermanagement':{
+            fs.readFile('views/manager.html','utf-8',(err,data)=>{
+                if(err){
+                    throw new Error(err.message)
+                }
+            else {
+
+               userController.showListUserManager(req,res);
+            }
+        });   
+            
+            break;
+        }
 
         default: 
-
             const filesDefences = req.url.match(/\.js|\.css|\.png|\.jpg/);
             if (filesDefences) {
                 const extension = mimeTypes[filesDefences[0].toString().split('.')[1]];
