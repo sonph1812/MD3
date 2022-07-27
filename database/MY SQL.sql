@@ -21,8 +21,7 @@ create table if not exists User
     Email   varchar(50) null,
     PhoneNumber varchar(10) null
 );
-select * from User;
-select * from User where Email = 'admin@gmail.com' and Password = '123456';
+
 
 
 create table if not exists NhaXuatBan
@@ -31,7 +30,6 @@ create table if not exists NhaXuatBan
         primary key,
     TenNXB varchar(100) null
 );
-use BookManagement;
 create table if not exists Role
 (
     id  int primary key,
@@ -47,7 +45,7 @@ create table if not exists UserRole
 	foreign key (User_id) references User(id),
 	foreign key (Role_id) references Role(id)
 );
-drop table UserRole;
+
 create table if not exists TheLoai
 (
     id         int auto_increment
@@ -158,8 +156,6 @@ create index TheLoai
 create index TinhTrang_id
     on Sach (TinhTrang_id);
 
-
-drop table Role;
 
 create index Role_id
     on UserRole (Role_id);

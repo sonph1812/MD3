@@ -10,7 +10,7 @@ class UserController {
     }
 
     showListUser(req,res){
-        fs.readFile('views/user/list-user.html','utf-8',async (err,data)=>{
+        fs.readFile('views/admin.html','utf-8',async (err,data)=>{
             if(err){
                 throw new Error(err.message)
             }
@@ -20,17 +20,17 @@ class UserController {
                 users.map((user,index)=>{
                     tbody += ` 
                     <tr>
-                    <td ">${index +1}</th>
                     <td ">${user.Username}</td>
                     <td ">${user.Password}</td>
                     <td ">${user.Address}</td>
                     <td ">${user.DOB} </td>
                     <td ">${user.Email}</td>
                     <td ">${user.PhoneNumber}</td>
-                    <td><a href="/views/update/${user.id}" class="btn btn-primary">Edit</a></td>
-                    <td><a href="/views/delete/${user.id}" class="btn btn-danger">Delete</a></td>
-                  </tr>`
+                    </tr>`
+                    // <td><a href="/views/update/${user.id}" class="btn btn-primary">Edit</a></td>
+                    // <td><a href="/views/delete/${user.id}" class="btn btn-danger">Delete</a></td>
                 });
+                
                 data = data.replace('{user}', tbody)
                 res.writeHead(200, {'Content-Type':'text/html'});
                 res.write(data);
@@ -58,39 +58,34 @@ class UserController {
             data += chunk;
         });
         req.on('end',async()=>{
-            let success = true;
             let user = qs.parse(data);
-            
-            let regexPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-            if (!regexPassword.test(user.password)){
-                console.log('Mật khẩu phải có hơn 8 kí tự và ít nhất 1 số!');
-            }else {
-                // if(user.password !== user.passwordConfirm){
-                //     console.log('Mật khẩu xác nhận không đúng!');
-                // }else {
-                    let dataUser = await this.user.getUser();
-                    for (let users of dataUser) {
-                        if(user.email === users.email) {
-                            console.log('email đã tồn tại!')
-                            success = false;
-                        }else if (user.phone === users.phone) {
-                            console.log('Số điện thoại đã tồn tại')
-                            success = false;
-                        }
-                    };
-                    if (success === true) {
+            // let regexPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+            // if (!regexPassword.test(user.password)){
+            //     console.log('Mật khẩu phải có hơn 8 kí tự và ít nhất 1 số !');
+            // }else {
+                this.user.checkRegisterUser(user.username, user.phonenumber).then((data)=>{
+                    // console.log(data);
+                    if(data.length == 0){
                         this.user.insertUser(user);
-                        this.user.createRole(user);
+                        console.log(user.email);
+                        this.user.createRole(user.email);
                         res.writeHead(301, {
-                            location: '/views/login'
+                            location: '/login'
                         });
                         return res.end();
-                    
-                }
-            }
+                       
+                    }
+                    else {
+                        console.log('Email or phone da ton tai');
+                        return res.end();
+                    }
+                })
+               
+            // }
             
         });
     }
+    
     showUserEditForm(req,res, idUpdate){
         fs.readFile('views/update/update.html','utf-8',async(err,data)=>{
             if(err){
@@ -103,6 +98,7 @@ class UserController {
                     data = data.replace('{email}', user.Email);
                     data = data.replace('{phone}',user.PhoneNumber);
                     data = data.replace('{dob}',user.DOB);
+                    
                     data = data.replace('{address}',user.Address);
                 }
                 res.writeHead(200, {'Content-Type':'text/html'});
@@ -125,36 +121,32 @@ class UserController {
             return res.end();
         });
     }
+
     loginUser(req, res){
-        let flag = false;
+      
         let data = '';
         req.on('data', chunk=>{
             data += chunk
         });
-        req.on('end',async ()=>{
-            data = qs.parse(data);
-            let dataUser = await this.user.getUser();
-            for(let user of dataUser) {
-              
-                if(data.email === user.Email && data.password == user.Password) {
-                    flag = true;
-                    break;
-                }
-            }
-            if(flag) {
-                console.log('Login Success');
-                res.writeHead(301, {location:'/views/admin'})
-                return res.end();
-            }
-            else {
-                console.log('Tai khoan khong ton tai');
-                res.end()
-            }
 
+        req.on('end',async ()=>{
+            let users = qs.parse(data); 
+            console.log(users);
+            this.user.checkLoginUser(users.email, users.password).then(data =>{
+            if(data.length !==0) {
+
+                console.log('Login Success');
+                res.writeHead(301, {location:'/admin'})
+                return res.end();
+                }
+                else {
+                    console.log('Tai khoan khong ton tai');
+                    res.end()
+                }
             });
 
-           
+            });    
         }
-  
+
 }
 module.exports = UserController;

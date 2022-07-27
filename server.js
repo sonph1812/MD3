@@ -32,17 +32,14 @@ const mimeTypes = {
 let server = http.createServer((req,res)=>{
     let path = url.parse(req.url)
     let pathUrl = path.pathname;
-
     let method = req.method;
-
-
 
     switch(pathUrl) {
         case '/': {
             homeController.showHomePage(req,res);
             break;
         }
-        case '/views/register/':{
+        case '/register':{
             
             if(method ==='GET') {
                 userController.showFormCreateUser(req,res);
@@ -52,21 +49,20 @@ let server = http.createServer((req,res)=>{
             }
             break;
           }
-        case '/views/admin':{
+        case '/admin':{
             fs.readFile('views/admin.html','utf-8',(err,data)=>{
                 if(err){
                     throw new Error(err.message)
                 }
                 else {
-                    res.writeHead(200, {'Content-Type':'text/html'});
-                    res.write(data);
-                    return res.end();
+                    userController.showListUser(req,res);
+                    
                  }
                 });
 
             break;
         }
-        case '/views/login/': {
+        case '/login': {
             
         if(method === 'GET') {
             fs.readFile('views/login/login.html','utf-8',(err,data)=>{
@@ -74,6 +70,7 @@ let server = http.createServer((req,res)=>{
                     throw new Error(err.message)
                 }
                 else {
+                    
                     res.writeHead(200, {'Content-Type':'text/html'});
                     res.write(data);
                     return res.end();
@@ -87,10 +84,10 @@ let server = http.createServer((req,res)=>{
             break;
         }
 
-        case "/views/user/":{
-            userController.showListUser(req,res);
-            break;
-        }
+        // case "/views/user/":{
+        //     userController.showListUser(req,res);
+        //     break;
+        // }
 
         case '/views/update/':{
             if(method == 'GET'){
@@ -99,6 +96,19 @@ let server = http.createServer((req,res)=>{
             else {
                 userController.editUser(req,res)
             }
+            break;
+        }
+        case '/user/profile': {
+            fs.readFile('views/updateuser.html','utf-8',(err,data)=>{
+                if(err){
+                    throw new Error(err.message)
+                }
+            else {
+                res.writeHead(200, {'Content-Type':'text/html'});
+                res.write(data);
+                return res.end("ok");
+            }
+        });   
             break;
         }
 
@@ -115,10 +125,9 @@ let server = http.createServer((req,res)=>{
 
             // errorController.showError404Page(req,res);
             break;
-        
     }
 })
 
-server.listen(8080, ()=>{
-    console.log('Server is running http//:localhost:8080');
+server.listen(8002, ()=>{
+    console.log('Server is running http//:localhost:8002');
 });
