@@ -640,9 +640,9 @@ body {
 				</a>
 			</li>
 			<li>
-				<a href="#">
+				<a href="views/team.html" >
 					<i class='bx bxs-group' ></i>
-					<span class="text">Team</span>
+					<span class="text">Tìm kiếm</span>
 				</a>
 			</li>
 		</ul>
@@ -671,9 +671,18 @@ body {
 		<nav>
 			<i class='bx bx-menu' ></i>
 			<a href="#" class="nav-link">Categories</a>
-			<form action="#">
+
+			
+
+			<form method="POST" action="/search">
 				<div class="form-input">
-					<input type="search" placeholder="Search...">
+					<input
+					type="search"
+					class="form-control"
+					placeholder="Search..."
+					id="top-search"
+					name="search"
+				  />
 					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
 				</div>
 			</form>

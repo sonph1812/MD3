@@ -616,7 +616,7 @@ body {
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
-				<a href="#">
+				<a href="views/admin">
 					<i class='bx bxs-dashboard' ></i>
 					<span class="text">Dashboard</span>
 				</a>
@@ -624,28 +624,27 @@ body {
 			<li>
 				<a href="#">
 					<i class='bx bxs-shopping-bag-alt' ></i>
-					<span class="text">My </span>
+					<span class="text">My Store</span>
 				</a>
 			</li>
 			<li>
 				<a href="#">
 					<i class='bx bxs-doughnut-chart' ></i>
-					<span class="text">Book Management</span>
+					<span class="text">BookManagement</span>
 				</a>
 			</li>
 			<li>
 				<a href="#">
 					<i class='bx bxs-message-dots' ></i>
-					<span class="text">Bookshelf Management</span>
+					<span class="text">BookshaelfsManagement</span>
 				</a>
 			</li>
 			<li>
-				<a href="/search">
+				<a href="#">
 					<i class='bx bxs-group' ></i>
 					<span class="text">Tìm kiếm</span>
 				</a>
 			</li>
-				
 		</ul>
 		<ul class="side-menu">
 			<li>
@@ -672,14 +671,9 @@ body {
 		<nav>
 			<i class='bx bx-menu' ></i>
 			<a href="#" class="nav-link">Categories</a>
-			<form action="GET">
+			<form action="#">
 				<div class="form-input">
-					<select name="" id="">
-						<option value="">The loai</option>
-						<option value="">danh muc</option>
-					</select>
 					<input type="search" placeholder="Search...">
-					
 					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
 				</div>
 			</form>
@@ -715,7 +709,7 @@ body {
 					<span class="text">......</span>
 				</a>
 			</div>
-
+<!-- 
 			<ul class="box-info">
 				<li>
 					<i class='bx bxs-calendar-check' ></i>
@@ -738,45 +732,56 @@ body {
 						<p>Total Sales</p>
 					</span>
 				</li>
-			</ul>
+			</ul> -->
 
 
 			<div class="table-data">
 				<div class="order">
 					<div class="head">
 						<h3>Recent Orders</h3>
-						<i class='bx bx-search' ></i>
 						<i class='bx bx-filter' ></i>
 					</div>
-					<table>
-						<thead>
-							<tr>
-								
-								<th scope="col">UserName</th>
-								<th scope="col">Password</th>
-								<th scope="col">Address</th>
-								<th scope="col">Date of birth</th>
-								<th scope="col">Email</th>
-								<th scope="col">Phone</th>
-							  </tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<img src="/assets/image/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td>01-10-2021</td>
-								<td>01-10-2021</td>
-								<td>01-10-2021</td>
-								<td>01-10-2021</td>
+					<select name="" id="unit">
+						<option value="Category" name="Category">Thể loại</option>
+						<option value="status" name="status">Tình trạng sách</option>
+						<option value="index" name="index">Vị trí sách</option>
+						<option value="findbyname" name="findbyname">Tìm theo cuốn sách đang có</option>
+					</select>
+					<form action="/search" method="post">
+						<div class="form-input">
+							<input name="search" type="search" placeholder="Search...">
+							<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+						</div>
+					</form>
+				
+					<table class="table table-centered table-striped dt-responsive nowrap w-100" id="bookshelfs-datatable">
+					<thead>
+					  <tr>
+						<th style="width: 20px">
+						  <div class="custom-control custom-checkbox">
+							<input
+							  type="checkbox"
+							  class="custom-control-input"
+							  id="customCheck0"
+							/>
+							<label
+							  class="custom-control-label"
+							  for="customCheck0"
+							  >&nbsp;</label
+							>
+						  </div>
+						</th>
+						<td>Name</td>
+						<td>Description</td>
+						<td>Category</td>
+						<td>Image</td>
+					  </tr>
+					</thead>
+					<tbody>	
+					  {bookshelfs}
+					</tbody>
+				  </table>
 
-								<td><span class="status completed">Completed</span></td>
-							</tr>
-							
-						</tbody>
-					</table>
 				</div>
 				<!-- <div class="todo">
 					<div class="head">

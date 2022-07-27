@@ -7,7 +7,8 @@ const fs= require('fs');
 const Usercontroller = require('./controller/user-controller')
 const ErrorController = require('./controller/error-contrller');
 const HomeController = require('./controller/home-controller')
-
+const bookshelfcontroller = require('./controller/bookshelf-controller')
+let bookController = new bookshelfcontroller()
 let errorController = new ErrorController();
 let userController = new Usercontroller();
 let homeController = new HomeController();
@@ -101,6 +102,17 @@ let server = http.createServer((req,res)=>{
             }
             break;
         }
+    
+        case '/search':{
+            if(method == 'GET'){
+                bookController.showSearch(req, res);
+            }
+            else {
+                bookController.findByCategory(req, res)
+            }
+            break;
+
+          }
 
         default: 
 
