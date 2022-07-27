@@ -1,3 +1,4 @@
+const fs = require('fs');
 const Connection = require('./connection');
 
 class User {
@@ -34,5 +35,45 @@ class User {
                }
            })
        }
+       createRole(user) {
+        
+       }
+       getUserId(id) {
+        return new Promise((resolve,rejesct)=>{
+            let query = `select * from User where id = ${id}`;
+            this.connection.query(query,(err,data)=>{
+                if(err){
+                    rejesct(err);
+                }
+                else {
+                    resolve(data);
+                }
+            })
+        })
+       }
+
+       updateUser(id, user) {
+        let query =`update User set Username = '${user.username}',Password='${user.password}',Address='${user.address}',
+        Email='${user.email}',PhoneNumber='${user.phonenumber}' where id = ${id};`
+        this.connection.query(query,(err,data)=>{
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('Update success')
+            }
+        })
+       }
+
+       deleteProduct(id){
+        let query = `delete from User where id = ${id}`;
+        this.connection.query(query, (err, data) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('Delete success')
+            }
+        })
+        }
+        
 }
 module.exports = User;

@@ -2,7 +2,7 @@ const fs = require('fs');
 
 class HomeController {
     showHomePage(req,res) {
-        fs.readFile('views/index.html', 'utf-8', (err, data) => {
+        fs.readFile('views/home.html', 'utf-8', (err, data) => {
             if (err) {
                 console.log('File NotFound!');
             } else {
