@@ -62,6 +62,20 @@ let server = http.createServer((req,res)=>{
 
             break;
         }
+        case '/user':{
+            fs.readFile('views/homeuser.html','utf-8',(err,data)=>{
+                if(err){
+                    throw new Error(err.message)
+                }
+                else {
+                    res.writeHead(200, {'Content-Type':'text/html'});
+                    res.write(data);
+                    return res.end();
+                 }
+                });
+
+            break;
+        }
         case '/login': {
             
         if(method === 'GET') {

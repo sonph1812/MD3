@@ -129,17 +129,22 @@ class UserController {
             data += chunk
         });
 
-        req.on('end',async ()=>{
+        req.on('end', async ()=>{
             let users = qs.parse(data); 
-            console.log(users);
-            this.user.checkLoginUser(users.email, users.password).then(data =>{
+           await this.user.checkLoginUser(users.email, users.password).then(data =>{
             if(data.length !==0) {
-
-                console.log('Login Success');
-                res.writeHead(301, {location:'/admin'})
-                return res.end();
-                }
-                else {
+                   this.user.checkRole(data[0].id).then(role =>{
+                       if(role[0].Role_id == 0){
+                           res.writeHead(301, {location:'/admin'})
+                           return res.end();
+                       }
+                       else {
+                           res.writeHead(301, {location:'/user'})
+                           return res.end();
+                       }
+                   })  
+            }
+            else {
                     console.log('Tai khoan khong ton tai');
                     res.end()
                 }

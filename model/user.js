@@ -61,10 +61,10 @@ class User {
 
         checkRole(user){
             return new Promise((resolve, reject)=>{
-                let query = `select Role_id from UserRole where User_id = ${user.id};`
+                let query = `select Role_id from UserRole where User_id = ${user};`
                 this.connection.query(query,(err,data)=>{
                     if(err){
-                        reject(err)
+                        reject(err.message)
                     }
                        else {
                            resolve(data)
