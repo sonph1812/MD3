@@ -117,26 +117,30 @@ class User {
         })
        }
 
-       updateUser(id, user) {
-        let query =`update User set Username = '${user.username}',Password='${user.password}',Address='${user.address}',
-        Email='${user.email}',PhoneNumber='${user.phonenumber}' where id = ${id};`
-        this.connection.query(query,(err,data)=>{
-            if(err){
-                throw new Error(err.message)
-            } else {
-                console.log('Update success')
-            }
-        })
+       updateUser(id, users) {
+        return new Promise((resolve, reject)=>{
+            let querySql = `update User set Username = '${users.username}',Password='${users.password}',Address='${users.address}',DOB ='${users.dob}',Email='${users.email}',PhoneNumber='${users.phone}' where id = ${id};`;
+            this.connection.query(querySql,(err,data)=>{
+                if(err){
+                    reject(err)
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+        
        }
 
-       deleteProduct(id){
-        let query = `delete from User where id = ${id}`;
-        this.connection.query(query, (err, data) => {
-            if(err){
-                throw new Error(err.message)
-            } else {
-                console.log('Delete success')
-            }
+       romeveUser(id){
+        return new Promise((resolve, reject)=>{
+            let query = `delete from User where id = ${id}`;
+            this.connection.query(query, (err, data) => {
+                if(err){
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            })
         })
         }
         

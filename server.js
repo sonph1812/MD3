@@ -3,6 +3,7 @@
 const http = require('http');
 const url = require('url');
 const fs= require('fs');
+const qs = require('qs')
 
 const Usercontroller = require('./controller/user-controller')
 const ErrorController = require('./controller/error-contrller');
@@ -112,7 +113,7 @@ let server = http.createServer((req,res)=>{
         });   
             break;
         }
-        case '/usermanagement':{
+        case '/admin/user':{
             fs.readFile('views/manager.html','utf-8',(err,data)=>{
                 if(err){
                     throw new Error(err.message)
@@ -125,7 +126,28 @@ let server = http.createServer((req,res)=>{
             
             break;
         }
-
+        case '/admin/user/edit':{
+            let query = qs.parse(path.query)
+            let idUpdate = query.id
+            if(method ==='GET'){
+                userController.showUserEditForm(req, res, idUpdate)
+            }
+            else{
+                userController.editUser(req, res, idUpdate);
+            }
+            break;
+        }
+        case '/admin/user/delete': {
+            let query = qs.parse(path.query)
+            let idUpdate = query.id
+            if(method ==='GET'){
+                userController.deleteUser(req, res, idUpdate)
+            }
+            else{
+                userController.showListUserManager(req, res);
+            }
+            break;
+        }
         default: 
             const filesDefences = req.url.match(/\.js|\.css|\.png|\.jpg/);
             if (filesDefences) {

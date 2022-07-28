@@ -26,9 +26,9 @@ class UserController {
                     <td ">${user.DOB} </td>
                     <td ">${user.Email}</td>
                     <td ">${user.PhoneNumber}</td>
+                    </tr>`
                     // <td><a href="/views/update/${user.id}" class="btn btn-primary">Edit</a></td>
                     // <td><a href="/views/delete/${user.id}" class="btn btn-danger">Delete</a></td>
-                    </tr>`
                 });
                 
                 data = data.replace('{user}', tbody)
@@ -46,6 +46,7 @@ class UserController {
             else {
                 let users = await this.user.getUser();
                 let tbody ='';
+                
                 users.map((user,index)=>{
                     tbody += ` 
                     <tr>
@@ -55,8 +56,9 @@ class UserController {
                     <td ">${user.DOB} </td>
                     <td ">${user.Email}</td>
                     <td ">${user.PhoneNumber}</td>
-                    <td><a href="/views/update/${user.id}" class="btn btn-primary">Edit</a></td>
-                    <td><a href="/views/delete/${user.id}" class="btn btn-danger">Delete</a></td>
+                    
+                    <td><a href="/admin/user/edit?id=${user.id}" class="btn btn-primary">Edit</a></td>
+                    <td><a href="/admin/user/delete?id=${user.id}" class="btn btn-danger">Delete</a></td>
                     </tr>`
                 });
                 
@@ -128,19 +130,25 @@ class UserController {
     }
     
     showUserEditForm(req,res, idUpdate){
-        fs.readFile('views/update/update.html','utf-8',async(err,data)=>{
+        fs.readFile('views/user/edituser.html','utf-8',async(err,data)=>{
             if(err){
-                throw new Error(err.message)
+                console.log('File notfound');
             }
             else {
                 let user = await this.user.getUserId(idUpdate);
+               
                 if(user.length > 0) {
-                    data = data.replace('{name}',user.Username);
-                    data = data.replace('{email}', user.Email);
-                    data = data.replace('{phone}',user.PhoneNumber);
+                    data = data.replace('{id}',user[0].id);
+                    data = data.replace('{name}',user[0].Username);
+                    data = data.replace('{name}',user[0].Username);
+                    data = data.replace('{email}', user[0].Email);
+                    data = data.replace('{email}', user[0].Email);
+                    data = data.replace('{password}', user[0].Password);
+                    data = data.replace('{phone}',user[0].PhoneNumber);
+                    data = data.replace('{dob}',user[0].DOB); 
+                    data = data.replace('{address}',user[0].Address);
+                    data = data.replace('{address}',user[0].Address);
 
-                    // data = data.replace('{dob}',user.DOB); 
-                    data = data.replace('{address}',user.Address);
                 }
                 res.writeHead(200, {'Content-Type':'text/html'});
                 res.write(data);
@@ -148,28 +156,41 @@ class UserController {
              }
             })
     }
+
     editUser(req, res, id) {
+
+        
         let data = '';
         req.on('data', chunk => {
             data += chunk;
         });
-        req.on('end', () => {
+
+        req.on('end', async() => {
             let user = qs.parse(data);
-            this.user.updateUser(id, user);
+            this.user.updateUser(user.id, user).then(()=>{
+                res.writeHead(301, {
+                    location: '/admin/user'
+                });
+                return res.end();
+            })
+        });
+    }
+
+    deleteUser(req, res, id) {
+        this.user.romeveUser(id).then(()=>{
             res.writeHead(301, {
-                location: '/user'
+                location: '/admin/user'
             });
             return res.end();
         });
     }
 
+
     loginUser(req, res){
-      
         let data = '';
         req.on('data', chunk=>{
             data += chunk
         });
-
         req.on('end', async ()=>{
             let users = qs.parse(data); 
            await this.user.checkLoginUser(users.email, users.password).then(data =>{
