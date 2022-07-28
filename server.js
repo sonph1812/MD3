@@ -63,6 +63,19 @@ let server = http.createServer((req, res) => {
       }
       break;
     }
+    case '/test':{
+
+      fs.readFile("views/test.html", "utf-8", (err, data) => {
+        if (err) {
+          console.log("File NotFound!");
+        } else {
+          res.writeHead(200, { "Content-Type": "text/html" });
+          res.write(data);
+          return res.end();
+        }
+      });
+      break;
+    }
 
     case "/views/admin/book/delete": {
       let query = qs.parse(path.query);
@@ -74,6 +87,7 @@ let server = http.createServer((req, res) => {
       }
       break;
     }
+   
 
     default:
       const filesDefences = req.url.match(/\.js|\.css|\.png|\.jpg/);
