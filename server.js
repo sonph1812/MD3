@@ -1,17 +1,15 @@
-
-
 const http = require('http');
 const url = require('url');
 const fs= require('fs');
-
 const Usercontroller = require('./controller/user-controller')
 const ErrorController = require('./controller/error-contrller');
 const HomeController = require('./controller/home-controller')
-const bookshelfcontroller = require('./controller/bookshelf-controller')
-let bookController = new bookshelfcontroller()
+const SearchController = require('./controller/search-controller')
+let search = new SearchController()
 let errorController = new ErrorController();
 let userController = new Usercontroller();
 let homeController = new HomeController();
+
 
 const mimeTypes = {
     "html": "text/html",
@@ -105,10 +103,10 @@ let server = http.createServer((req,res)=>{
     
         case '/search':{
             if(method == 'GET'){
-                bookController.showSearch(req, res);
+                search.showSearch(req,res)
             }
             else {
-                bookController.findByCategory(req, res)
+                search.findByCategory(req,res)
             }
             break;
 
